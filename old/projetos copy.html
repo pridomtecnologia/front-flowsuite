@@ -1,0 +1,433 @@
+<!-- TELA 1: LISTA DE ORÇAMENTOS -->
+<div id="orcamento-lista" class="content-wrapper space-y-6">
+  <div class="card">
+    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+      <h2 class="text-xl font-bold">Orçamentos</h2>
+      <div class="flex items-center gap-4">
+        <input
+          type="text"
+          placeholder="Buscar orçamento..."
+          class="border border-slate-300 rounded-md px-3 py-2"
+        />
+        <button
+          id="novo-orcamento-btn"
+          class="bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 flex items-center gap-2"
+        >
+          <i data-feather="plus"></i>
+          Novo Orçamento
+        </button>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="p-3">Número</th>
+            <th class="p-3">Projeto</th>
+            <th class="p-3">Cliente</th>
+            <th class="p-3 text-right">Valor Total</th>
+            <th class="p-3 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 font-mono">#ORC_2724</td>
+            <td class="p-3 font-medium">RAPIDITO 10</td>
+            <td class="p-3">BIMBO DO BRASIL</td>
+            <td class="p-3 text-right font-mono">R$ 178.362,12</td>
+            <td class="p-3 text-center">
+              <button
+                class="text-blue-600 hover:underline editar-orcamento-btn"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TELA 2: DETALHE / CRIAÇÃO DE ORÇAMENTO -->
+<div id="orcamento-detalhe" class="content-wrapper hidden space-y-4">
+  <div class="card p-2 bg-slate-50 border-b">
+    <div class="flex items-center gap-2">
+      <button
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-200 rounded-md"
+      >
+        <i data-feather="plus" class="w-4 h-4"></i> Novo
+      </button>
+      <button
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-200 rounded-md"
+      >
+        <i data-feather="search" class="w-4 h-4"></i> Procurar
+      </button>
+      <button
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-200 rounded-md"
+      >
+        <i data-feather="edit-3" class="w-4 h-4"></i> Editar
+      </button>
+      <button
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 hover:bg-red-100 rounded-md"
+      >
+        <i data-feather="x-circle" class="w-4 h-4"></i> Excluir
+      </button>
+      <div class="border-l h-6 mx-2"></div>
+      <button
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-md"
+      >
+        <i data-feather="save" class="w-4 h-4"></i> Salvar
+      </button>
+      <button
+        id="voltar-lista-btn"
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-200 rounded-md"
+      >
+        <i data-feather="list" class="w-4 h-4"></i> Lista
+      </button>
+
+      <!-- Botão Geral com Submenu -->
+      
+      
+      <button
+        id="submenu-geral"
+        class="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-200 rounded-md"
+      >
+         <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="financeiro"
+          ><div class="flex items-center">
+            <i data-feather="select" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">GERAL</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-financeiro" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="contas-pagar">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Gerar Carta Orçamento</a
+            >
+          </li>
+          <li class="submenu-item" data-target="contas-receber">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Gerar PDF</a
+            >
+          </li>
+      </button>
+      <!-- FIM - Botão Geral com Submenu -->
+    </div>
+  </div>
+  <div id="main-content-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div id="planilha-col" class="lg:col-span-2 space-y-4">
+      <div class="card p-0">
+        <div
+          class="flex justify-between items-center border-b border-slate-200"
+        >
+          <div class="tabs">
+            <button
+              class="orcamento-tab-button py-3 px-4 font-semibold active"
+              data-target="tab-identificacao"
+            >
+              Identificação
+            </button>
+            <button
+              class="orcamento-tab-button py-3 px-4 font-semibold"
+              data-target="tab-planilha"
+            >
+              Planilha de Custos
+            </button>
+            <button
+              class="orcamento-tab-button py-3 px-4 font-semibold"
+              data-target="tab-documentos"
+            >
+              Pasta de Documentos
+            </button>
+          </div>
+          <div class="flex items-center gap-2 pr-4 text-sm font-medium">
+            <button class="text-slate-600 hover:text-blue-600">IMPORTAR</button>
+            <button class="text-slate-600 hover:text-blue-600">EXPORTAR</button>
+          </div>
+        </div>
+        <div id="tab-identificacao" class="p-4 orcamento-tab-content">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div class="p-2 border rounded-md bg-slate-50">
+              <label class="block text-xs text-slate-500">Orçamento</label
+              ><input
+                type="text"
+                value="2724"
+                disabled
+                class="w-full font-semibold bg-transparent"
+              />
+            </div>
+            <div class="p-2 border rounded-md bg-slate-50">
+              <label class="block text-xs text-slate-500">Job</label
+              ><input
+                type="text"
+                value="0"
+                disabled
+                class="w-full font-semibold bg-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Empresa</label>
+              <div class="flex items-center">
+                <select class="form-select">
+                  <option>KONDZILLA</option></select
+                ><button class="p-1">
+                  <i data-feather="search" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">C. Custos</label>
+              <div class="flex items-center">
+                <select class="form-select">
+                  <option>PUBLICIDADE</option></select
+                ><button class="p-1">
+                  <i data-feather="search" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Agência</label>
+              <div class="flex items-center">
+                <select class="form-select">
+                  <option>KONDZILLA FILMES LTDA.</option></select
+                ><button class="p-1">
+                  <i data-feather="search" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Cliente</label>
+              <div class="flex items-center">
+                <select class="form-select">
+                  <option>BIMBO DO BRASIL LTDA</option></select
+                ><button class="p-1">
+                  <i data-feather="search" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium">Produto</label
+              ><input type="text" value="RAPIDITO 10" class="form-input" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium">Título</label
+              ><input type="text" value="RAPIDITO" class="form-input" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium">Diretor</label>
+              <div class="flex items-center">
+                <select class="form-select">
+                  <option>A DEFINIR</option></select
+                ><button class="p-1">
+                  <i data-feather="search" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Tipo de Job</label
+              ><select class="form-select">
+                <option>PUBLICIDADE</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Agrupamento</label
+              ><select class="form-select">
+                <option>Não Definido</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div id="tab-planilha" class="p-4 orcamento-tab-content hidden">
+          <table id="orcamento-tabela" class="w-full text-sm"></table>
+        </div>
+        <div id="tab-documentos" class="p-4 orcamento-tab-content hidden">
+          <p>Área para upload de documentos.</p>
+        </div>
+      </div>
+      <div class="card p-2 bg-slate-50 border">
+        <div class="flex items-center gap-2 text-sm">
+          <button class="px-3 py-1.5 font-semibold text-blue-600">
+            Transformar em Job</button
+          ><button class="px-3 py-1.5">Cronograma</button
+          ><button class="px-3 py-1.5">Fases</button>
+        </div>
+      </div>
+    </div>
+    <div id="valores-col" class="lg:col-span-1 space-y-4">
+      <div class="card">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold">Valores</h3>
+          <button
+            id="toggle-valores-panel"
+            class="p-1 hover:bg-slate-100 rounded-full"
+            title="Ocultar/Mostrar Painel de Valores"
+          >
+            <i data-feather="chevrons-right"></i>
+          </button>
+        </div>
+        <div id="valores-panel">
+          <table id="resumo-valores" class="w-full text-sm">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="p-2 text-left">Descrição</th>
+                <th class="p-2 text-center w-24">%</th>
+                <th class="p-2 text-right w-40">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="font-semibold bg-slate-200">
+                <td class="p-2" colspan="3">100 - Totais</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">
+                  100.001 - Custo de Produção com Honorários
+                </td>
+                <td></td>
+                <td
+                  class="p-2 text-right font-mono"
+                  id="resumo-custo-producao"
+                  data-valor="0"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">100.002 - Taxa de Impulsionamento</td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    class="w-full text-center bg-slate-50 p-1 rounded resumo-input"
+                    data-calculo="percentual"
+                    data-base="resumo-custo-producao"
+                    value="13.5"
+                  />
+                </td>
+                <td
+                  class="p-2 text-right font-mono"
+                  data-resultado="taxa-impulsionamento"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">100.003 - Comissão Comercial</td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    class="w-full text-center bg-slate-50 p-1 rounded resumo-input"
+                    data-calculo="percentual"
+                    data-base="resumo-custo-producao"
+                    value="3"
+                  />
+                </td>
+                <td
+                  class="p-2 text-right font-mono"
+                  data-resultado="comissao-comercial"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">100.004 - Taxa de Produção</td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    class="w-full text-center bg-slate-50 p-1 rounded resumo-input"
+                    data-calculo="percentual"
+                    data-base="resumo-custo-producao"
+                    value="30"
+                  />
+                </td>
+                <td
+                  class="p-2 text-right font-mono"
+                  data-resultado="taxa-producao"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">100.005 - Taxa de Liquidez</td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    class="w-full text-center bg-slate-50 p-1 rounded resumo-input"
+                    data-calculo="percentual"
+                    data-base="resumo-custo-producao"
+                    value="30"
+                  />
+                </td>
+                <td
+                  class="p-2 text-right font-mono"
+                  data-resultado="taxa-liquidez"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="font-semibold bg-slate-200">
+                <td class="p-2" colspan="3">200 - Totais Sem Honorários</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">
+                  200.001 - Custo de Produção sem Honorários
+                </td>
+                <td></td>
+                <td
+                  class="p-2 text-right font-mono"
+                  id="resumo-total-sem-honorarios"
+                  data-valor="0"
+                >
+                  R$ 0,00
+                </td>
+              </tr>
+              <tr class="font-semibold bg-slate-200">
+                <td class="p-2" colspan="3">300 - Totais Impostos</td>
+              </tr>
+              <tr class="border-b">
+                <td class="p-2 pl-4">300.001 - Impostos</td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    class="w-full text-center bg-slate-50 p-1 rounded resumo-input"
+                    data-calculo="percentual"
+                    data-base="resumo-total-sem-honorarios"
+                    value="19.53"
+                  />
+                </td>
+                <td class="p-2 text-right font-mono" data-resultado="impostos">
+                  R$ 0,00
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="bg-slate-800 text-white font-bold text-lg">
+              <tr>
+                <td class="p-3 text-right" colspan="2">TOTAL GERAL</td>
+                <td id="resumo-total-geral" class="p-3 text-right font-mono">
+                  R$ 0,00
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Outras telas do módulo -->
+<div id="jobs-lista" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Jobs</h2>
+</div>
+<div id="fechamento-projeto" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Fechamento de Projeto</h2>
+</div>
