@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FLOW SUITE - Frontend</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- ApexCharts (para gráficos) via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+      /* Estilo para esconder elementos */
+      .hidden {
+        display: none;
+      }
+      /* Estilização para o marcador do accordion */
+      details > summary {
+        list-style: none;
+      }
+      details > summary::-webkit-details-marker {
+        display: none;
+      }
+      /* Animação suave para o ícone do accordion */
+      details summary .chevron-icon {
+        transition: transform 0.2s ease-in-out;
+      }
+      details[open] summary .chevron-icon {
+        transform: rotate(180deg);
+      }
+      /* Transições para a sidebar */
+      #sidebar,
+      #main-container {
+        transition: all 0.3s ease-in-out;
+      }
+      #sidebar.collapsed {
+        width: 5rem; /* 80px */
+      }
+      #sidebar.collapsed .sidebar-text,
+      #sidebar.collapsed .submenu-icon {
+        display: none;
+      }
+      #sidebar.collapsed .sidebar-link-container {
+        justify-content: center;
+      }
+      #sidebar.collapsed .sidebar-user-info {
+        flex-direction: column;
+        align-items: center;
+      }
+      #sidebar.collapsed .sidebar-user-info .ml-3 {
+        display: none;
+      }
+      /* Estilos para o Kanban */
+      .kanban-column {
+        min-height: 200px;
+      }
+      .kanban-card {
+        cursor: grab;
+      }
+      .kanban-card:active {
+        cursor: grabbing;
+      }
+      .dragging {
+        opacity: 0.5;
+        border: 2px dashed #4f46e5;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div id="app-container" class="flex h-screen bg-gray-100">
+      <!-- ========== SIDEBAR ========== -->
+      <aside
+        id="sidebar"
+        class="bg-gray-800 text-white flex flex-col transition-all duration-300 ease-in-out w-64 fixed md:relative h-full z-30 -translate-x-full md:translate-x-0"
+      >
+        <div
+          class="flex items-center justify-between h-16 px-4 border-b border-gray-700 flex-shrink-0"
+        >
+          <span class="text-xl font-bold tracking-wider sidebar-text"
+            >FLOW SUITE</span
+          >
+          <button
+            id="sidebar-close-btn"
+            class="md:hidden text-gray-400 hover:text-white"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <nav id="main-nav" class="flex-1 p-4 space-y-1 overflow-y-auto">
+          <!-- Itens do menu serão inseridos aqui pelo JavaScript -->
+        </nav>
+        <div class="p-4 border-t border-gray-700 flex-shrink-0">
+          <div class="sidebar-user-info flex items-center mb-4">
+            <img
+              class="h-10 w-10 rounded-full object-cover flex-shrink-0"
+              src="https://placehold.co/100x100/E2E8F0/4A5568?text=AV"
+              alt="Avatar do Usuário"
+            />
+            <div class="ml-3 sidebar-text">
+              <p class="text-sm font-semibold text-white">Usuário Admin</p>
+              <p class="text-xs text-gray-400">admin@flowsuite.com</p>
+            </div>
+          </div>
+          <button
+            id="sidebar-toggle-btn"
+            class="w-full flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-gray-700 hover:text-white"
+          >
+            <i data-lucide="chevrons-left" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Overlay para fechar sidebar no mobile -->
+      <div
+        id="sidebar-overlay"
+        class="fixed inset-0 bg-black opacity-50 z-20 md:hidden hidden"
+      ></div>
+
+      <div id="main-container" class="flex-1 flex flex-col overflow-hidden">
+        <!-- ========== HEADER ========== -->
+        <header
+          class="bg-white h-16 flex items-center justify-between px-6 shadow-sm flex-shrink-0 z-10"
+        >
+          <div class="flex items-center">
+            <button id="sidebar-open-btn" class="text-gray-500 mr-4 md:hidden">
+              <i data-lucide="menu"></i>
+            </button>
+            <div class="relative hidden md:block">
+              <i
+                data-lucide="search"
+                class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"
+              ></i>
+              <input
+                type="text"
+                placeholder="Buscar projetos, clientes..."
+                class="bg-gray-100 rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <div class="flex items-center space-x-5">
+            <button class="relative text-gray-500 hover:text-gray-700">
+              <i data-lucide="bell"></i>
+              <span
+                class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
+                >3</span
+              >
+            </button>
+            <div class="relative">
+              <img
+                class="h-10 w-10 rounded-full object-cover cursor-pointer"
+                src="https://placehold.co/100x100/E2E8F0/4A5568?text=AV"
+                alt="Avatar do Usuário"
+              />
+            </div>
+          </div>
+        </header>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main
+          id="main-content"
+          class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6 md:p-8"
+        >
+          <!-- As views (páginas) serão inseridas aqui -->
+        </main>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- ÍCONES ---
+        lucide.createIcons();
+
+        // --- ELEMENTOS DO DOM ---
+        const mainContent = document.getElementById("main-content");
+        const mainNav = document.getElementById("main-nav");
+        const sidebar = document.getElementById("sidebar");
+        const sidebarOpenBtn = document.getElementById("sidebar-open-btn");
+        const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
+        const sidebarToggleBtn = document.getElementById("sidebar-toggle-btn");
+        const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+        // --- FUNÇÃO UTILITÁRIA ---
+        const formatCurrency = (value) =>
+          `R$ ${value.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`;
+
+        // --- DADOS MOCK ---
+        const orcamentosData = [
+          {
+            id: "#ORC_2724",
+            projeto: "RAPIDITO 10",
+            cliente: "BIMBO DO BRASIL",
+            valor: 178362.12,
+            status: "Em Andamento",
+          },
+          {
+            id: "#ORC_2725",
+            projeto: "CAMPANHA VERÃO",
+            cliente: "COCA-COLA",
+            valor: 350000.0,
+            status: "Aprovado",
+          },
+          {
+            id: "#ORC_2726",
+            projeto: "VÍDEO INSTITUCIONAL",
+            cliente: "GOOGLE BRASIL",
+            valor: 95000.0,
+            status: "Enviado",
+          },
+        ];
+
+        let jobsData = [
+          {
+            id: "JOB_001",
+            projeto: "CAMPANHA NATAL",
+            cliente: "Magazine Luiza",
+            orcado: 250000,
+            realizado: 120000,
+            status: "Em Andamento",
+          },
+          {
+            id: "JOB_002",
+            projeto: "FILME PUBLICITÁRIO",
+            cliente: "Bradesco",
+            orcado: 750000,
+            realizado: 745000,
+            status: "Finalizado",
+          },
+          {
+            id: "JOB_003",
+            projeto: "AÇÃO DIGITAL",
+            cliente: "Netflix",
+            orcado: 80000,
+            realizado: 55000,
+            status: "Em Andamento",
+          },
+        ];
+
+        const contasAPagarData = [
+          {
+            id: "CP001",
+            doc: "036/036",
+            fornecedor: "KONDZILLA FILMES",
+            previsao: "29/08/2035",
+            valor: 271.07,
+            situacao: "A Vencer",
+          },
+          {
+            id: "CP002",
+            doc: "035/036",
+            fornecedor: "KONDZILLA FILMES",
+            previsao: "29/07/2035",
+            valor: 271.07,
+            situacao: "A Vencer",
+          },
+          {
+            id: "CP003",
+            doc: "NF-1020",
+            fornecedor: "ESTÚDIO GLOBO",
+            previsao: "15/07/2025",
+            valor: 12500.0,
+            situacao: "Vencido",
+          },
+          {
+            id: "CP004",
+            doc: "RPS-889",
+            fornecedor: "AGÊNCIA TALENT",
+            previsao: "20/07/2025",
+            valor: 3200.5,
+            situacao: "Pago",
+          },
+          {
+            id: "CP005",
+            doc: "NF-1021",
+            fornecedor: "MUNDO AUDIO",
+            previsao: "25/07/2025",
+            valor: 1800.0,
+            situacao: "Não Aprovado",
+          },
+        ];
+
+        const contasAReceberData = [
+          {
+            id: "CR001",
+            doc: "012/012",
+            notaFiscal: "",
+            cliente: "KONDZILLA EDITORA LTDA",
+            previsao: "24/01/26",
+            valor: 6978.64,
+            situacao: "A Vencer",
+          },
+          {
+            id: "CR002",
+            doc: "011/011 S/N",
+            notaFiscal: "",
+            cliente: "KONDZILLA EDITORA LTDA",
+            previsao: "26/12/25",
+            valor: 33480.0,
+            situacao: "A Vencer",
+          },
+          {
+            id: "CR003",
+            doc: "003/003",
+            notaFiscal: "",
+            cliente: "OAKLEY",
+            previsao: "30/08/25",
+            valor: 150000.0,
+            situacao: "Vencido",
+          },
+          {
+            id: "CR004",
+            doc: "008/011",
+            notaFiscal: "S/N",
+            cliente: "KOZA HOLDING PARTI...",
+            previsao: "25/09/25",
+            valor: 75.4,
+            situacao: "Recebido",
+          },
+          {
+            id: "CR005",
+            doc: "009/011",
+            notaFiscal: "S/N",
+            cliente: "KOZA HOLDING PARTI...",
+            previsao: "27/10/25",
+            valor: 75.4,
+            situacao: "Aguardando Cliente",
+          },
+        ];
+
+        const cadastrosData = [
+          {
+            id: 1,
+            situacao: "Ativo",
+            tags: ["Cliente"],
+            cnpj: "44.740.635/0001-09",
+            razao: "18K PRODUCOES E EVENTOS LTDA",
+            fantasia: "18K PRODUCOES E EVENTOS...",
+            telefone: "",
+            contato: "",
+            email: "producao@18kproducoes.com",
+          },
+          {
+            id: 2,
+            situacao: "Ativo",
+            tags: ["Fornecedor"],
+            cnpj: "23.436.254/0001-52",
+            razao: "23.436.254 VITORINO FERRE...",
+            fantasia: "23.436.254 VITORINO FERRE...",
+            telefone: "",
+            contato: "",
+            email: "vitorino.ti@gmail.com",
+          },
+          {
+            id: 3,
+            situacao: "Ativo",
+            tags: ["Cliente", "Fornecedor"],
+            cnpj: "38.146.381/0001-94",
+            razao: "3C GAMING LTDA",
+            fantasia: "3C GAMING LTDA",
+            telefone: "",
+            contato: "AVILA",
+            email: "avilabeat@gmail.com",
+          },
+          {
+            id: 4,
+            situacao: "Inativo",
+            tags: ["Fornecedor"],
+            cnpj: "39.330.607/0001-75",
+            razao: "615 FILMES PRODUTORA DE...",
+            fantasia: "615 FILMES PRODUTORA DE...",
+            telefone: "",
+            contato: "",
+            email: "jessica_c@hotmail.com",
+          },
+          {
+            id: 5,
+            situacao: "Ativo",
+            tags: ["Funcionário"],
+            cnpj: "12.345.678/0001-99",
+            razao: "MARIA DA SILVA",
+            fantasia: "MARIA",
+            telefone: "(11) 98765-4321",
+            contato: "MARIA",
+            email: "maria.silva@empresa.com",
+          },
+          {
+            id: 6,
+            situacao: "Ativo",
+            tags: ["Artista"],
+            cnpj: "",
+            razao: "JOÃO SANTOS",
+            fantasia: "JOÃO ARTISTA",
+            telefone: "(21) 99876-5432",
+            contato: "JOÃO",
+            email: "joao.santos@email.com",
+          },
+        ];
+
+        const menuItems = [
+          {
+            id: "dashboards",
+            title: "Dashboards",
+            icon: "layout-dashboard",
+            sub: [
+              { id: "dashboard_projetos", title: "Projetos" },
+              { id: "dashboard_fluxo_caixa", title: "Fluxo de Caixa" },
+              { id: "dashboard_dre", title: "DRE Gerencial" },
+            ],
+          },
+          { id: "cadastro_geral", title: "Cadastros", icon: "users" },
+          {
+            id: "financeiro",
+            title: "Financeiro",
+            icon: "dollar-sign",
+            sub: [
+              { id: "financeiro_pagar", title: "Contas a Pagar" },
+              { id: "financeiro_receber", title: "Contas a Receber" },
+              { id: "financeiro_bancos", title: "Bancos" },
+            ],
+          },
+          {
+            id: "projetos",
+            title: "Projetos",
+            icon: "folder-kanban",
+            sub: [
+              { id: "projetos_orcamento", title: "Orçamento" },
+              { id: "projetos_projetos", title: "Projetos (JOBs)" },
+              { id: "projetos_fechamento", title: "Fechamento de Projeto" },
+              { id: "projetos_verba", title: "Solicitação de Verba" },
+            ],
+          },
+          {
+            id: "royalties",
+            title: "Royalties",
+            icon: "crown",
+            sub: [{ id: "royalties_relatorios", title: "Relatórios" }],
+          },
+          {
+            id: "autoral",
+            title: "Autoral",
+            icon: "book-user",
+            sub: [
+              { id: "cadastro_artista_autoral", title: "Cadastro de Artistas" },
+              { id: "autoral_musica", title: "Cadastro de Música" },
+            ],
+          },
+          { id: "inventario", title: "Inventário", icon: "warehouse" },
+        ];
+
+        const orcamentoEstrutura = [
+          {
+            grupo: "001 - PRÉ-PRODUÇÃO",
+            itens: [
+              "Pesquisa",
+              "Roteirista",
+              "Shooting Board",
+              "Tradução",
+              "Impressão / Xerox",
+              "Estudo Parte Teste de VT 1",
+              "Estudo Parte Teste de VT 2",
+              "Operador de camera Teste VT 1",
+              "Operador de camera Teste VT 2",
+              "Câmera Teste de VT",
+              "Luz para Teste de VT",
+              "Maquiador",
+              "Camareira de Teste - VT",
+              "Direção TVT",
+              "Editor",
+              "Ajudante para TVT 1",
+              "Ajudante para TVT 2",
+              "Cache Presença",
+              "HD para TVT",
+              "Verba Alimentação",
+              "Verba Pre Produção",
+              "Telefones",
+              "Xerox",
+              "Outros",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "002 - PRODUÇÃO",
+            itens: [
+              "Taxa de Locações - PJ 1",
+              "Taxa de Locações - Pf 2",
+              "Impostos s/ Locações - PF",
+              "Base para filmagem 1",
+              "Base para filmagem 2",
+              "Gratificações",
+              "Policiamento",
+              "Verba Objeto 1",
+              "Verba Objeto 2",
+              "Verba Figurino1",
+              "Verba Figurino2",
+              "Lavanderia",
+              "Compra de produto pra Filmagem",
+              "Aluguel de Veículos para a Cena",
+              "Envelopamento do carro dourado",
+              "Seguro de carros",
+              "Animais",
+              "Alimentos p filmagem",
+              "Teleprompter",
+              "Banheiro Químico",
+              "Camarim",
+              "Play Back",
+              "Caixa de Produção 1",
+              "Caixa de Produção 2",
+              "Mapas Meteorologicos",
+              "Caminhão Pipa",
+              "Ambulancia",
+              "Verba de Produção",
+              "Outros",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "003 - CENOGRAFIA",
+            itens: [
+              "Estúdio - Diárias Filmagens",
+              "Estúdio - Diárias Preparação e pré light",
+              "Material Construção",
+              "Aderecista",
+              "Cenotecnico",
+              "Pintor",
+              "Tinta",
+              "Ar Condicionado",
+              "Bombeiro para montagem de cenário",
+              "Outros Gastos com Cenografia",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "004 - TRANSPORTES",
+            itens: [
+              "Carros de de Pre Produção",
+              "Carros de de Produção",
+              "Carros de de Prod. Figurino",
+              "Carros de Pre Prod. de Figurino",
+              "Carros de Pre Prod de Objetos",
+              "Carros de Prod de Objetos",
+              "Carros de Prod de Locação",
+              "Carros Alimentação",
+              "Carros de Filmagem",
+              "Carros de Camera",
+              "Carro de Agencia / Cliente",
+              "Carro de Diretor",
+              "Onibus",
+              "Pick-up",
+              "Caminhão",
+              "Taxi Estacionamento Pedagio",
+              "Guincho",
+              "Aluguel de Carros",
+              "Motoboy",
+              "Combustível",
+              "Currier",
+              "Outros",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "005 - EQUIPE DE FILMAGEM",
+            itens: [
+              "Diretor",
+              "Diretor de Fotografia",
+              "Operador de Steady",
+              "1º Ass. Câmera 1",
+              "2º Ass. Câmera 1",
+              "Video assist 1",
+              "Logger 1",
+              "Assistente de Direção",
+              "Diretor de produção 1",
+              "1a. Assist Produção 1",
+              "2a. Assist Produção",
+              "Platô",
+              "Produtor de Arte",
+              "Assist de Arte",
+              "Produtor de Objetos",
+              "Produtor de Figurino",
+              "Costureira",
+              "Camareira",
+              "Produtor de Elenco",
+              "Produtor de Locação",
+              "Maquiador",
+              "Ass. Maquiador",
+              "Cabeleireiro",
+              "Manicure",
+              "Preparador de Mockup",
+              "Técnico de Efeitos Especiais",
+              "Piloto",
+              "Eletricista 1",
+              "Ajudantes",
+              "Transf. Borderô com equipe",
+            ],
+          },
+          {
+            grupo: "006 - ELENCO",
+            itens: [
+              "Ator Principal 1",
+              "Ator Principal 2",
+              "Atores Coadjuvantes 1",
+              "Modelo 1",
+              "Modelo 2",
+              "Crianças 1",
+              "Figuração Especial",
+              "Outros Gastos com Elenco",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "007 - ALIMENTAÇÃO",
+            itens: [
+              "Alimentação de Pre / Pós Prod.",
+              "Alimentação de Filmagem 1",
+              "Alimentação de Filmagem 2",
+              "Verba de Manutenção Filmagem",
+              "Cache de Manutenção",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "008 - HOTEL",
+            itens: [
+              "Hotel Pré-pesquisa",
+              "Hotel Equipe",
+              "Hotel Cliente",
+              "Hotel Agencia",
+              "Hotel Celebridade",
+              "Pernoiem Equipe",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "009 - PASSAGENS AÉREAS",
+            itens: [
+              "Agencia",
+              "Cliente",
+              "Equipe - Filmagem",
+              "Excesso de Bagagem",
+              "Outras despesas de passagens",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "010 - EQUIPAMENTO DE FILMAGEM",
+            itens: [
+              "Câmera 1",
+              "Acessórios de Camera",
+              "Lentes 1",
+              "Motion Control",
+              "Travelling",
+              "Rádios",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "011 - ILUMINAÇÃO",
+            itens: [
+              "Luz 1",
+              "Gerador Grande",
+              "Gerador Pq",
+              "Estrutura de Iluminação",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "012 - PRODUÇÃO DE SOM",
+            itens: [
+              "Trilha Sonora",
+              "Locução",
+              "Estúdio de Som",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "013 - FINALIZAÇÃO",
+            itens: [
+              "Edição",
+              "Motion",
+              "Correção de Cor",
+              "Montador",
+              "Stock Shot",
+              "Cópia de Trabalho",
+              "Transf. Borderô",
+            ],
+          },
+          {
+            grupo: "014 - OUTROS",
+            itens: [
+              "Condecine",
+              "Sindicine",
+              "Seguro",
+              "Sated",
+              "Assessoria Jurídica",
+              "Testagem COVID-19",
+            ],
+          },
+          {
+            grupo: "015 - OUTROS FORA DA TAXA",
+            itens: ["Fora Taxa 1", "Fora Taxa 2", "Fora Taxa 3"],
+          },
+        ];
+
+        // --- LÓGICA DE NAVEGAÇÃO E VIEWS ---
+        const views = {
+          dashboard_projetos: `
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard de Projetos</h1>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                             <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"> <div> <p class="text-sm font-medium text-gray-500">Projetos Ativos</p> <p class="text-3xl font-bold text-gray-800">42</p> </div> <div class="bg-blue-100 text-blue-600 p-3 rounded-full"><i data-lucide="folder-kanban"></i></div> </div>
+                             <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"> <div> <p class="text-sm font-medium text-gray-500">Orçamentos Pendentes</p> <p class="text-3xl font-bold text-gray-800">18</p> </div> <div class="bg-blue-100 text-blue-600 p-3 rounded-full"><i data-lucide="file-text"></i></div> </div>
+                             <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"> <div> <p class="text-sm font-medium text-gray-500">Tarefas Concluídas</p> <p class="text-3xl font-bold text-gray-800">89%</p> </div> <div class="bg-blue-100 text-blue-600 p-3 rounded-full"><i data-lucide="check-square"></i></div> </div>
+                             <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between"> <div> <p class="text-sm font-medium text-gray-500">Rentabilidade Média</p> <p class="text-3xl font-bold text-gray-800">15%</p> </div> <div class="bg-blue-100 text-blue-600 p-3 rounded-full"><i data-lucide="dollar-sign"></i></div> </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-semibold text-gray-700 mb-4">Evolução dos Projetos (Últimos 6 meses)</h2>
+                            <div id="chart-projetos"></div>
+                        </div>
+                    </div>`,
+          dashboard_fluxo_caixa: `
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard de Fluxo de Caixa</h1>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-semibold text-gray-700 mb-4">Entradas vs Saídas (Mensal)</h2>
+                                <div id="chart-fluxo-caixa"></div>
+                            </div>
+                             <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h2 class="text-xl font-semibold text-gray-700 mb-4">Próximas Contas</h2>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h3 class="font-bold text-green-600">A Receber</h3>
+                                        <ul class="text-sm text-gray-600 mt-2 space-y-1">${contasAReceberData
+                                          .filter(
+                                            (c) => c.situacao === "A Vencer"
+                                          )
+                                          .slice(0, 3)
+                                          .map(
+                                            (c) =>
+                                              `<li class="flex justify-between"><span>${
+                                                c.cliente
+                                              }</span> <strong>${formatCurrency(
+                                                c.valor
+                                              )}</strong></li>`
+                                          )
+                                          .join("")}</ul>
+                                    </div>
+                                    <div class="border-t pt-4">
+                                        <h3 class="font-bold text-red-600">A Pagar</h3>
+                                        <ul class="text-sm text-gray-600 mt-2 space-y-1">${contasAPagarData
+                                          .filter(
+                                            (c) => c.situacao === "A Vencer"
+                                          )
+                                          .slice(0, 3)
+                                          .map(
+                                            (c) =>
+                                              `<li class="flex justify-between"><span>${
+                                                c.fornecedor
+                                              }</span> <strong>${formatCurrency(
+                                                c.valor
+                                              )}</strong></li>`
+                                          )
+                                          .join("")}</ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          dashboard_dre: `
+                     <div>
+                        <h1 class="text-3xl font-bold text-gray-800 mb-6">DRE Gerencial</h1>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <div class="flow-root">
+                                <ul class="text-sm space-y-2">
+                                    <li class="flex justify-between py-2"><span class="font-semibold text-gray-800">(+) Receita Operacional Bruta</span> <span class="font-semibold text-gray-800">${formatCurrency(
+                                      500000
+                                    )}</span></li>
+                                    <li class="flex justify-between py-2 pl-4"><span class="text-gray-600">(-) Impostos sobre a Receita</span> <span class="text-red-600">(${formatCurrency(
+                                      60000
+                                    )})</span></li>
+                                    <li class="flex justify-between py-2 border-t font-bold"><span class="text-gray-900">(=) Receita Operacional Líquida</span> <span class="text-gray-900">${formatCurrency(
+                                      440000
+                                    )}</span></li>
+                                    <li class="flex justify-between py-2 pl-4"><span class="text-gray-600">(-) Custo dos Serviços Prestados</span> <span class="text-red-600">(${formatCurrency(
+                                      210000
+                                    )})</span></li>
+                                    <li class="flex justify-between py-2 border-t font-bold"><span class="text-gray-900">(=) Lucro Bruto</span> <span class="text-gray-900">${formatCurrency(
+                                      230000
+                                    )}</span></li>
+                                    <li class="flex justify-between py-2 pl-4"><span class="text-gray-600">(-) Despesas Operacionais</span> <span class="text-red-600">(${formatCurrency(
+                                      85000
+                                    )})</span></li>
+                                    <li class="flex justify-between py-2 border-t font-bold"><span class="text-gray-900">(=) Lucro Operacional (EBIT)</span> <span class="text-gray-900">${formatCurrency(
+                                      145000
+                                    )}</span></li>
+                                    <li class="flex justify-between py-2 pl-4"><span class="text-gray-600">(-) Despesas Financeiras</span> <span class="text-red-600">(${formatCurrency(
+                                      15000
+                                    )})</span></li>
+                                    <li class="flex justify-between py-2 border-t font-bold"><span class="text-gray-900">(=) Lucro Antes do Imposto de Renda (LAIR)</span> <span class="text-gray-900">${formatCurrency(
+                                      130000
+                                    )}</span></li>
+                                     <li class="flex justify-between py-2 pl-4"><span class="text-gray-600">(-) Provisão para IRPJ e CSLL</span> <span class="text-red-600">(${formatCurrency(
+                                       44200
+                                     )})</span></li>
+                                    <li class="flex justify-between py-3 border-t-2 border-blue-600 font-bold text-blue-600 text-lg"><span class="">(=) Lucro Líquido do Exercício</span> <span class="">${formatCurrency(
+                                      85800
+                                    )}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          projetos_orcamento: `
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <h1 class="text-3xl font-bold text-gray-800">Orçamentos</h1>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors" data-view-target="projetos_orcamento_detail">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                                <span>Novo Orçamento</span>
+                            </button>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <table class="min-w-full bg-white">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Número</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projeto</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor Total</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    ${orcamentosData
+                                      .map(
+                                        (orc) => `
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="py-4 px-6 whitespace-nowrap text-sm font-medium text-gray-900">${
+                                              orc.id
+                                            }</td>
+                                            <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${
+                                              orc.projeto
+                                            }</td>
+                                            <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${
+                                              orc.cliente
+                                            }</td>
+                                            <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${formatCurrency(
+                                              orc.valor
+                                            )}</td>
+                                            <td class="py-4 px-6 whitespace-nowrap text-sm font-medium">
+                                                <button class="text-blue-600 hover:text-blue-900" data-view-target="projetos_orcamento_detail">Editar</button>
+                                            </td>
+                                        </tr>
+                                    `
+                                      )
+                                      .join("")}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`,
+          projetos_orcamento_detail: `
+                    <div>
+                        <!-- BARRA DE AÇÕES SUPERIOR -->
+                        <div class="bg-white p-2 rounded-lg shadow-md mb-6">
+                            <div class="flex items-center space-x-2 flex-wrap">
+                                <button class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-100"><i data-lucide="file-plus" class="w-4 h-4"></i><span>Novo</span></button>
+                                <button class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-blue-600 hover:bg-blue-100"><i data-lucide="save" class="w-4 h-4"></i><span>Salvar</span></button>
+                                <button class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-red-600 hover:bg-red-100"><i data-lucide="trash-2" class="w-4 h-4"></i><span>Excluir</span></button>
+                                <div class="border-l h-6 mx-2"></div>
+                                <button id="transformar-job-btn" class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-green-600 hover:bg-green-100 font-semibold"><i data-lucide="arrow-right-left" class="w-4 h-4"></i><span>Transformar em JOB</span></button>
+                                <button class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-100"><i data-lucide="calendar-days" class="w-4 h-4"></i><span>Cronograma</span></button>
+                                <div class="border-l h-6 mx-2"></div>
+                                <!-- NOVO MENU DROPDOWN "GERAL" -->
+                                <div class="relative" id="geral-menu-container">
+                                    <button id="geral-menu-btn" class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-100">
+                                        <span>Geral</span>
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </button>
+                                    <div id="geral-menu-dropdown" class="absolute left-0 mt-2 w-56 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
+                                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                            <a href="#" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i data-lucide="file-text" class="w-4 h-4"></i><span>Gerar Carta Orçamento</span></a>
+                                            <a href="#" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i data-lucide="upload" class="w-4 h-4"></i><span>Importar Planilha</span></a>
+                                            <a href="#" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i data-lucide="download" class="w-4 h-4"></i><span>Exportar</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-l h-6 mx-2"></div>
+                                <button class="flex items-center space-x-2 px-3 py-2 text-sm rounded-md transition-colors text-gray-700 hover:bg-gray-100" data-view-target="projetos_orcamento"><i data-lucide="list" class="w-4 h-4"></i><span>Lista</span></button>
+                            </div>
+                        </div>
+
+                        <!-- ABAS -->
+                        <div id="orcamento-tabs" class="border-b border-gray-200 mb-6">
+                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                                <a href="#" data-tab="identificacao" class="tab-btn border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Identificação</a>
+                                <a href="#" data-tab="planilha" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Planilha de Custos</a>
+                                <a href="#" data-tab="documentos" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Pasta de Documentos</a>
+                            </nav>
+                        </div>
+                        
+                        <!-- CONTEÚDO DAS ABAS -->
+                        <div id="tab-content-container">
+                            <!-- O conteúdo da aba ativa será inserido aqui -->
+                        </div>
+                    </div>`,
+          projetos_projetos: `
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <h1 class="text-3xl font-bold text-gray-800">Projetos (JOBs)</h1>
+                            <div class="flex items-center space-x-4">
+                               <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                                    <input id="job-search-input" type="text" placeholder="Buscar por nome ou JOB #" class="bg-white rounded-full pl-10 pr-4 py-2 w-64 border focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors" data-view-target="projetos_orcamento_detail">
+                                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                                    <span>Novo Projeto</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <table class="min-w-full bg-white">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JOB #</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projeto</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orçado</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Realizado</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="jobs-list-body" class="divide-y divide-gray-200">
+                                    <!-- Linhas de JOBs serão inseridas aqui -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`,
+          projetos_job_detail: `
+                     <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <h1 class="text-3xl font-bold text-gray-800">Detalhe do JOB</h1>
+                             <div class="flex items-center space-x-2">
+                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700">
+                                    <i data-lucide="file-check" class="w-5 h-5"></i>
+                                    <span>Fechamento</span>
+                                </button>
+                                <button class="text-gray-600 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-200" data-view-target="projetos_projetos">
+                                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                                    <span>Voltar para Lista</span>
+                                </button>
+                             </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h2 class="text-xl font-semibold">Projeto Exemplo</h2>
+                            <p class="text-gray-600">Conteúdo e detalhes do JOB aqui...</p>
+                        </div>
+                    </div>`,
+          projetos_fechamento: `
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h1 class="text-2xl font-bold text-gray-800 mb-6">Lançamento de Despesa (Fechamento)</h1>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="block text-sm font-medium text-gray-700">Projeto (JOB)</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Vincular projeto..."></div>
+                            <div><label class="block text-sm font-medium text-gray-700">Fornecedor</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Pesquisar fornecedor..."></div>
+                            <div><label class="block text-sm font-medium text-gray-700">Valor</label><input type="number" class="mt-1 w-full p-2 border rounded" placeholder="0,00"></div>
+                        </div>
+                    </div>
+                `,
+          projetos_verba: `
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h1 class="text-2xl font-bold text-gray-800 mb-6">Pedido de Verba</h1>
+                        <div class="space-y-6">
+                            <div class="p-4 border rounded-lg">
+                                <h3 class="font-semibold text-gray-700 mb-2">Identificação</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div><label class="block text-sm font-medium text-gray-700">Nº AP</label><input type="text" value="0" class="w-full mt-1 p-2 border rounded bg-gray-100" readonly></div>
+                                    <div><label class="block text-sm font-medium text-gray-700">Job</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Vincular Job..."></div>
+                                    <div><label class="block text-sm font-medium text-gray-700">Produtor</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                                    <div><label class="block text-sm font-medium text-gray-700">Plano de Contas</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                                </div>
+                            </div>
+                             <div class="p-4 border rounded-lg">
+                                <h3 class="font-semibold text-gray-700 mb-2">Ocorrência</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Valor</label>
+                                        <input type="number" value="0" class="w-full mt-1 p-2 border rounded">
+                                    </div>
+                                     <div>
+                                        <label class="block text-sm font-medium text-gray-700">Favorecido</label>
+                                        <input type="text" class="w-full mt-1 p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Data Emissão</label>
+                                        <input type="date" class="w-full mt-1 p-2 border rounded">
+                                    </div>
+                                     <div>
+                                        <label class="block text-sm font-medium text-gray-700">Modalidade</label>
+                                        <div class="mt-2 flex space-x-4">
+                                            <label class="flex items-center"><input type="radio" name="modalidade" class="mr-1"> Depósito</label>
+                                            <label class="flex items-center"><input type="radio" name="modalidade" class="mr-1"> Transferência</label>
+                                            <label class="flex items-center"><input type="radio" name="modalidade" class="mr-1"> Cash</label>
+                                            <label class="flex items-center"><input type="radio" name="modalidade" class="mr-1"> C. Crédito</label>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700">Discriminação</label>
+                                        <textarea class="w-full mt-1 p-2 border rounded" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          financeiro_pagar: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex flex-col">
+                        <div class="p-4 border-b">
+                            <h1 class="text-2xl font-bold text-gray-800">Contas a Pagar</h1>
+                        </div>
+                        <div class="flex-1 flex">
+                            <!-- Barra de Ações Lateral -->
+                            <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="edit" class="w-4 h-4"></i><span>Editar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="financeiro_pagar_detalhe"><i data-lucide="plus" class="w-4 h-4"></i><span>Incluir</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4"></i><span>Duplicar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="x-circle" class="w-4 h-4"></i><span>Cancelar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-green-600 hover:bg-green-100 font-semibold"><i data-lucide="dollar-sign" class="w-4 h-4"></i><span>Pagamentos</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="file-text" class="w-4 h-4"></i><span>Gerar Recibo</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="sheet" class="w-4 h-4"></i><span>Importar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-100"><i data-lucide="trash-2" class="w-4 h-4"></i><span>Excluir</span></button>
+                            </div>
+                            <!-- Tabela de Contas -->
+                            <div class="flex-1 overflow-x-auto">
+                                <table class="min-w-full text-sm">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="p-2 text-left font-semibold text-gray-600"><input type="checkbox" /></th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Situação</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Nº do Doc.</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Fornecedor</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Previsão Pag.</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${contasAPagarData
+                                          .map(
+                                            (conta) => `
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-2"><input type="checkbox" /></td>
+                                                <td class="p-2"><span class="px-2 py-1 text-xs rounded-full ${
+                                                  conta.situacao === "A Vencer"
+                                                    ? "bg-blue-100 text-blue-800"
+                                                    : conta.situacao ===
+                                                      "Vencido"
+                                                    ? "bg-red-100 text-red-800"
+                                                    : conta.situacao === "Pago"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-gray-100 text-gray-800"
+                                                }">${conta.situacao}</span></td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.doc
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.fornecedor
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.previsao
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${formatCurrency(
+                                                  conta.valor
+                                                )}</td>
+                                            </tr>
+                                        `
+                                          )
+                                          .join("")}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="p-2 border-t bg-gray-50 flex justify-between items-center text-sm font-semibold">
+                            <span>1 - ${contasAPagarData.length} de ${
+            contasAPagarData.length
+          } registros</span>
+                            <div class="flex items-center space-x-4">
+                                <span>Total:</span>
+                                <span class="text-blue-600">${formatCurrency(
+                                  contasAPagarData.reduce(
+                                    (acc, c) => acc + c.valor,
+                                    0
+                                  )
+                                )}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          financeiro_pagar_detalhe: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex">
+                        <!-- Barra Lateral de Ações -->
+                        <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-blue-600 hover:bg-blue-100 font-semibold"><i data-lucide="save" class="w-4 h-4"></i><span>Salvar</span></button>
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="financeiro_pagar"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Voltar</span></button>
+                        </div>
+                        <!-- Formulário Principal -->
+                        <div class="flex-1 p-6">
+                            <h1 class="text-2xl font-bold text-gray-800 mb-6">Nova Conta a Pagar</h1>
+                            <!-- Campos Superiores -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="md:col-span-1">
+                                    <label class="block text-sm font-medium text-gray-700">Favorecido / Fornecedor</label>
+                                    <input type="text" class="mt-1 block w-full p-2 border rounded-md shadow-sm" placeholder="Pesquisar fornecedor...">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Vencimento</label>
+                                    <input type="date" class="mt-1 block w-full p-2 border rounded-md shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Valor da Conta</label>
+                                    <input type="number" class="mt-1 block w-full p-2 border rounded-md shadow-sm" placeholder="0,00">
+                                </div>
+                            </div>
+                            <!-- Abas do Detalhe -->
+                            <div class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-6 text-sm">
+                                    <a href="#" class="border-b-2 border-blue-500 text-blue-600 py-2 px-1">Detalhes</a>
+                                    <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1">Impostos Retidos</a>
+                                    <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1">Pagamentos</a>
+                                    <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1">Diversos</a>
+                                </nav>
+                            </div>
+                            <div class="pt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div><label class="block text-sm font-medium text-gray-700">Nota Fiscal</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Data de Emissão</label><input type="date" class="mt-1 w-full p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Data de Registro</label><input type="date" class="mt-1 w-full p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Projeto</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Vincular projeto..."></div>
+                                <div class="md:col-span-4"><label class="block text-sm font-medium text-gray-700">Observações</label><textarea class="mt-1 w-full p-2 border rounded" rows="3"></textarea></div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          financeiro_receber: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex flex-col">
+                        <div class="p-4 border-b">
+                            <h1 class="text-2xl font-bold text-gray-800">Contas a Receber</h1>
+                        </div>
+                        <div class="flex-1 flex">
+                            <!-- Barra de Ações Lateral -->
+                            <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="edit" class="w-4 h-4"></i><span>Editar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="financeiro_receber_detalhe"><i data-lucide="plus" class="w-4 h-4"></i><span>Incluir</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4"></i><span>Duplicar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-green-600 hover:bg-green-100 font-semibold"><i data-lucide="dollar-sign" class="w-4 h-4"></i><span>Receber Agora</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="file-text" class="w-4 h-4"></i><span>Gerar Recibo</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-100"><i data-lucide="trash-2" class="w-4 h-4"></i><span>Excluir</span></button>
+                            </div>
+                            <!-- Tabela de Contas -->
+                            <div class="flex-1 overflow-x-auto">
+                                <table class="min-w-full text-sm">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="p-2 text-left font-semibold text-gray-600"><input type="checkbox" /></th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Situação</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Nº do Doc.</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Cliente</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Previsão Rec.</th>
+                                            <th class="p-2 text-left font-semibold text-gray-600">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${contasAReceberData
+                                          .map(
+                                            (conta) => `
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="p-2"><input type="checkbox" /></td>
+                                                <td class="p-2"><span class="px-2 py-1 text-xs rounded-full ${
+                                                  {
+                                                    "A Vencer":
+                                                      "bg-blue-100 text-blue-800",
+                                                    Vencido:
+                                                      "bg-red-100 text-red-800",
+                                                    Recebido:
+                                                      "bg-green-100 text-green-800",
+                                                    "Aguardando Cliente":
+                                                      "bg-purple-100 text-purple-800",
+                                                  }[conta.situacao] ||
+                                                  "bg-gray-100 text-gray-800"
+                                                }">${conta.situacao}</span></td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.doc
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.cliente
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${
+                                                  conta.previsao
+                                                }</td>
+                                                <td class="p-2 text-gray-700">${formatCurrency(
+                                                  conta.valor
+                                                )}</td>
+                                            </tr>
+                                        `
+                                          )
+                                          .join("")}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="p-2 border-t bg-gray-50 flex justify-between items-center text-sm font-semibold">
+                             <span>1 - ${contasAReceberData.length} de ${
+            contasAReceberData.length
+          } registros</span>
+                            <div class="flex items-center space-x-4">
+                                <span>Total:</span>
+                                <span class="text-blue-600">${formatCurrency(
+                                  contasAReceberData.reduce(
+                                    (acc, c) => acc + c.valor,
+                                    0
+                                  )
+                                )}</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          financeiro_receber_detalhe: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex">
+                        <!-- Barra Lateral de Ações -->
+                        <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-blue-600 hover:bg-blue-100 font-semibold"><i data-lucide="save" class="w-4 h-4"></i><span>Salvar</span></button>
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="financeiro_receber"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Voltar</span></button>
+                        </div>
+                        <!-- Formulário Principal -->
+                        <div class="flex-1 p-6">
+                            <h1 class="text-2xl font-bold text-gray-800 mb-6">Nova Conta a Receber</h1>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="md:col-span-1">
+                                    <label class="block text-sm font-medium text-gray-700">Cliente</label>
+                                    <input type="text" class="mt-1 block w-full p-2 border rounded-md shadow-sm" placeholder="Pesquisar cliente...">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Vencimento</label>
+                                    <input type="date" class="mt-1 block w-full p-2 border rounded-md shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Valor da Conta</label>
+                                    <input type="number" class="mt-1 block w-full p-2 border rounded-md shadow-sm" placeholder="0,00">
+                                </div>
+                            </div>
+                            <div class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-6 text-sm">
+                                    <a href="#" class="border-b-2 border-blue-500 text-blue-600 py-2 px-1">Detalhes</a>
+                                </nav>
+                            </div>
+                             <div class="pt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div><label class="block text-sm font-medium text-gray-700">Nota Fiscal</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Data de Emissão</label><input type="date" class="mt-1 w-full p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Projeto</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Vincular projeto..."></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Vendedor</label><input type="text" class="mt-1 w-full p-2 border rounded" placeholder="Vincular vendedor..."></div>
+                                <div class="md:col-span-4"><label class="block text-sm font-medium text-gray-700">Observações</label><textarea class="mt-1 w-full p-2 border rounded" rows="3"></textarea></div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          cadastro_geral: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex flex-col">
+                        <div class="p-4 border-b">
+                            <h1 class="text-2xl font-bold text-gray-800">Cadastros</h1>
+                        </div>
+                        <div class="flex-1 flex">
+                            <!-- Barra de Ações Lateral -->
+                            <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="edit" class="w-4 h-4"></i><span>Editar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="cadastro_detalhe"><i data-lucide="plus" class="w-4 h-4"></i><span>Incluir</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200"><i data-lucide="copy" class="w-4 h-4"></i><span>Duplicar</span></button>
+                                <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-red-600 hover:bg-red-100"><i data-lucide="trash-2" class="w-4 h-4"></i><span>Excluir</span></button>
+                            </div>
+                            <!-- Conteúdo Principal -->
+                            <div class="flex-1 flex flex-col p-4">
+                                <div class="flex items-center space-x-2 mb-4">
+                                    <select id="cadastro-search-method" class="p-2 border rounded-md text-sm">
+                                        <option value="razao">Nome/Razão Social</option>
+                                        <option value="cnpj">CNPJ/CPF</option>
+                                    </select>
+                                    <input id="cadastro-search-input" type="text" placeholder="Buscar..." class="w-full p-2 border rounded-md">
+                                </div>
+                                <div id="cadastro-filter-buttons" class="flex space-x-2 border-b border-gray-200 mb-4">
+                                    <button class="cadastro-filter-btn py-2 px-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600" data-tag="Todos">Todos</button>
+                                    <button class="cadastro-filter-btn py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700" data-tag="Cliente">Clientes</button>
+                                    <button class="cadastro-filter-btn py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700" data-tag="Fornecedor">Fornecedores</button>
+                                    <button class="cadastro-filter-btn py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700" data-tag="Funcionário">Funcionários</button>
+                                    <button class="cadastro-filter-btn py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700" data-tag="Artista">Artistas</button>
+                                </div>
+                                <div class="flex-1 overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="p-2 text-left font-semibold text-gray-600"><input type="checkbox" /></th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">Situação</th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">Tags</th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">CNPJ / CPF</th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">Razão Social / Nome</th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">E-mail</th>
+                                                <th class="p-2 text-left font-semibold text-gray-600">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cadastro-list-body" class="divide-y">
+                                            <!-- Linhas de cadastros serão inseridas aqui -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="p-2 border-t bg-gray-50 flex justify-between items-center text-sm font-semibold">
+                                    <span id="cadastro-count"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          cadastro_detalhe: `
+                    <div class="bg-white rounded-lg shadow-md h-full flex">
+                        <!-- Barra Lateral de Ações -->
+                        <div class="w-48 p-4 border-r bg-gray-50 flex flex-col space-y-2">
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-blue-600 hover:bg-blue-100 font-semibold"><i data-lucide="save" class="w-4 h-4"></i><span>Salvar</span></button>
+                             <button class="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm rounded-md text-gray-700 hover:bg-gray-200" data-view-target="cadastro_geral"><i data-lucide="arrow-left" class="w-4 h-4"></i><span>Voltar</span></button>
+                        </div>
+                        <!-- Formulário Principal -->
+                        <div class="flex-1 p-6 overflow-y-auto">
+                            <h1 class="text-2xl font-bold text-gray-800 mb-6">Incluir Novo Cadastro</h1>
+                            <!-- Campos Superiores -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Razão Social / Nome Completo</label>
+                                    <input type="text" class="mt-1 block w-full p-2 border rounded-md shadow-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">CNPJ / CPF</label>
+                                    <input type="text" class="mt-1 block w-full p-2 border rounded-md shadow-sm">
+                                </div>
+                            </div>
+                             <!-- Seleção de Tags -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tags do Cadastro</label>
+                                <div class="flex flex-wrap gap-4">
+                                    <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"><span>Cliente</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"><span>Fornecedor</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"><span>Funcionário</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"><span>Artista</span></label>
+                                </div>
+                            </div>
+                            <!-- Abas do Detalhe -->
+                            <div id="cadastro-tabs" class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-6 text-sm overflow-x-auto">
+                                    <a href="#" data-tab="endereco" class="cadastro-tab-btn border-b-2 border-blue-500 text-blue-600 py-2 px-1 whitespace-nowrap">Endereço</a>
+                                    <a href="#" data-tab="telefones" class="cadastro-tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1 whitespace-nowrap">Telefones e E-mail</a>
+                                    <a href="#" data-tab="bancarios" class="cadastro-tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1 whitespace-nowrap">Dados Bancários</a>
+                                    <a href="#" data-tab="inscricoes" class="cadastro-tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 py-2 px-1 whitespace-nowrap">Inscrições, CNAE e Outros</a>
+                                </nav>
+                            </div>
+                            <div id="cadastro-tab-content" class="pt-6">
+                                <!-- Conteúdo da aba de cadastro será inserido aqui -->
+                            </div>
+                        </div>
+                    </div>
+                 `,
+          default: `<div class="text-center p-10 bg-white rounded-lg shadow-md">
+                            <h1 class="text-2xl font-bold text-gray-700">Página não encontrada</h1>
+                            <p class="text-gray-500 mt-2">Selecione uma opção no menu.</p>
+                         </div>`,
+        };
+
+        // --- TEMPLATES PARA O CONTEÚDO DAS ABAS ---
+        const cadastroTabContents = {
+          endereco: `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-3"><label class="block text-sm font-medium text-gray-700">Endereço</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Número</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Bairro</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Complemento</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Estado</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Cidade</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">CEP</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                    </div>
+                `,
+          telefones: `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700">DDD Telefone</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-3"><label class="block text-sm font-medium text-gray-700">Telefone</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">E-mail</label><input type="email" class="mt-1 w-full p-2 border rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">WebSite</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                    </div>
+                `,
+          bancarios: `
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700">Banco</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Agência</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Conta Corrente</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                     </div>
+                `,
+          inscricoes: `
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700">Inscrição Estadual</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Inscrição Municipal</label><input type="text" class="mt-1 w-full p-2 border rounded"></div>
+                     </div>
+                `,
+        };
+
+        const tabContents = {
+          identificacao: `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Coluna Esquerda: Formulário de Identificação -->
+                        <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                            <h2 class="text-lg font-bold mb-4 text-gray-800">Identificação</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="md:col-span-1"><label class="block text-gray-600">Orçamento</label><input type="text" value="2724" class="w-full mt-1 p-2 border rounded bg-gray-100" readonly></div>
+                                <div class="md:col-span-1"><label class="block text-gray-600">Job</label><input type="text" value="0" class="w-full mt-1 p-2 border rounded bg-gray-100" readonly></div>
+                                
+                                <div><label class="block text-gray-600">Empresa</label><input type="text" value="KONDZILLA" class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-gray-600">C. Custos</label><input type="text" value="PUBLICIDADE" class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-gray-600">Agência</label><input type="text" value="KONDZILLA FILMES LTDA." class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-gray-600">Cliente</label><input type="text" value="BIMBO DO BRASIL LTDA" class="w-full mt-1 p-2 border rounded"></div>
+                                <div class="md:col-span-2"><label class="block text-gray-600">Título</label><input type="text" value="RAPIDITO" class="w-full mt-1 p-2 border rounded"></div>
+                                
+                                <div><label class="block text-gray-600">Coprodutor</label><input type="text" class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-gray-600">Diretor</label><input type="text" value="A DEFINIR" class="w-full mt-1 p-2 border rounded"></div>
+                                
+                                <div><label class="block text-gray-600">Tipo de Job</label><input type="text" value="PUBLICIDADE" class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-gray-600">Agrupamento</label><input type="text" value="Não Definido" class="w-full mt-1 p-2 border rounded"></div>
+
+                                <div><label class="block text-sm font-medium text-gray-700">Fechar Job</label><input type="date" class="w-full mt-1 p-2 border rounded"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Validade Orçamento</label><input type="date" class="w-full mt-1 p-2 border rounded"></div>
+                            </div>
+                        </div>
+                        <!-- Coluna Direita: Valores e Resumo -->
+                        <div class="lg:col-span-1 space-y-6">
+                             <div class="bg-white p-4 rounded-lg shadow">
+                                <h2 class="text-lg font-bold mb-4 text-gray-800">Valores</h2>
+                                <div class="space-y-3 text-sm" id="valores-container">
+                                    <!-- Conteúdo do painel de valores será inserido aqui -->
+                                </div>
+                             </div>
+                             <div class="bg-white p-4 rounded-lg shadow">
+                                <h2 class="text-lg font-bold mb-4 text-gray-800">Resumo de Fechamento</h2>
+                                <div class="space-y-2 text-sm text-gray-600">
+                                    <div class="flex justify-between"><span>Orçado</span><span class="font-semibold text-gray-800">R$ 77.000,00</span></div>
+                                    <div class="flex justify-between"><span>Saldo Orç.</span><span class="font-semibold text-gray-800">R$ 77.000,00</span></div>
+                                    <div class="flex justify-between"><span>Liberado</span><span class="font-semibold text-gray-800">R$ 0,00</span></div>
+                                    <div class="flex justify-between"><span>Saldo Lib.</span><span class="font-semibold text-gray-800">R$ 0,00</span></div>
+                                    <div class="flex justify-between"><span>Realizado</span><span class="font-semibold text-gray-800">R$ 0,00</span></div>
+                                    <div class="flex justify-between"><span>Em Andto</span><span class="font-semibold text-gray-800">R$ 0,00</span></div>
+                                    <div class="flex justify-between"><span>APs Pend.</span><span class="font-semibold text-gray-800">R$ 0,00</span></div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                `,
+          planilha: `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- COLUNA ESQUERDA: PLANILHA DETALHADA -->
+                        <div id="planilha-container" class="lg:col-span-2 space-y-2">
+                             ${orcamentoEstrutura
+                               .map(
+                                 (grupo, index) => `
+                                <details class="bg-white rounded-lg shadow">
+                                    <summary class="flex items-center justify-between p-4 cursor-pointer font-semibold text-gray-700">
+                                        <span>${grupo.grupo}</span>
+                                        <div class="flex items-center space-x-4">
+                                            <span class="text-sm font-bold" id="total-grupo-${index}">R$ 0,00</span>
+                                            <i data-lucide="chevron-down" class="chevron-icon transition-transform transform"></i>
+                                        </div>
+                                    </summary>
+                                    <div class="p-4 border-t border-gray-200">
+                                        <div class="hidden md:grid grid-cols-12 gap-2 text-xs font-bold text-gray-500 mb-2">
+                                            <div class="col-span-4">Descrição</div>
+                                            <div>Qtd</div>
+                                            <div>Vlr. Unit.</div>
+                                            <div>Dias</div>
+                                            <div>Unid.</div>
+                                            <div class="col-span-2">Total</div>
+                                            <div class="col-span-2">Obs.</div>
+                                        </div>
+                                        <div id="itens-grupo-${index}" class="space-y-2">
+                                            ${grupo.itens
+                                              .map(
+                                                (item) => `
+                                                <div class="grid grid-cols-12 gap-2 items-center planilha-item">
+                                                    <div class="col-span-12 md:col-span-4"><input type="text" class="w-full p-1 border rounded text-sm" value="${item}"></div>
+                                                    <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-qtd" value="1"></div>
+                                                    <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-valor" value="0"></div>
+                                                    <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-dias" value="1"></div>
+                                                    <div class="col-span-4 md:col-span-1"><input type="text" class="w-full p-1 border rounded text-sm" value="un"></div>
+                                                    <div class="col-span-4 md:col-span-2"><input type="text" class="w-full p-1 border rounded text-sm bg-gray-100 item-total" readonly></div>
+                                                    <div class="col-span-4 md:col-span-2"><input type="text" class="w-full p-1 border rounded text-sm"></div>
+                                                </div>
+                                            `
+                                              )
+                                              .join("")}
+                                        </div>
+                                        <button class="add-item-btn mt-4 text-blue-600 hover:text-blue-800 text-sm font-semibold flex items-center space-x-1" data-group-index="${index}">
+                                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                                            <span>Adicionar Item</span>
+                                        </button>
+                                    </div>
+                                </details>
+                            `
+                               )
+                               .join("")}
+                            <div class="bg-gray-800 text-white p-4 rounded-lg shadow flex justify-between items-center font-bold text-lg">
+                                <span>TOTAL PLANILHA</span>
+                                <span id="total-planilha">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <!-- COLUNA DIREITA: VALORES -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white p-4 rounded-lg shadow sticky top-6">
+                                <h2 class="text-lg font-bold mb-4 text-gray-800">Valores</h2>
+                                <div class="space-y-3 text-sm" id="valores-container">
+                                    <!-- Conteúdo do painel de valores será inserido aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+          documentos: `<div class="bg-white p-10 rounded-lg shadow text-center"><h2 class="text-xl font-semibold text-gray-700">Pasta de Documentos</h2><p class="text-gray-500 mt-2">Funcionalidade em construção.</p></div>`,
+        };
+
+        const valoresPanelHTML = `
+                <div class="p-2 bg-gray-100 rounded-md">
+                    <label class="font-semibold text-gray-600">Custo de Produção com Honorários</label>
+                    <input id="custo-producao" type="text" value="R$ 0,00" class="w-full mt-1 p-1 border rounded bg-gray-200" readonly/>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span>Taxa de Impulsionamento</span>
+                    <div class="flex items-center space-x-2">
+                        <input id="perc-impulsionamento" type="number" value="13.5" class="w-20 p-1 border rounded text-right"/>
+                        <input id="valor-impulsionamento" type="text" class="w-28 p-1 border rounded bg-gray-200 text-right" readonly/>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span>Comissão Comercial</span>
+                     <div class="flex items-center space-x-2">
+                        <input id="perc-comissao" type="number" value="3.0" class="w-20 p-1 border rounded text-right"/>
+                        <input id="valor-comissao" type="text" class="w-28 p-1 border rounded bg-gray-200 text-right" readonly/>
+                    </div>
+                </div>
+                <div class="border-t my-2"></div>
+                <div class="flex justify-between items-center font-bold">
+                    <span>Totais sem Honorários</span>
+                    <input id="valor-sem-honorarios" type="text" value="R$ 0,00" class="w-28 p-1 border rounded bg-gray-200 text-right" readonly/>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span>Impostos</span>
+                    <div class="flex items-center space-x-2">
+                        <input id="perc-impostos" type="number" value="19.53" class="w-20 p-1 border rounded text-right"/>
+                        <input id="valor-impostos" type="text" class="w-28 p-1 border rounded bg-gray-200 text-right" readonly/>
+                    </div>
+                </div>
+                <div class="border-t my-2"></div>
+                <div class="bg-blue-600 text-white p-3 rounded-md flex justify-between items-center font-bold text-lg">
+                    <span>TOTAL GERAL</span>
+                    <span id="total-geral">R$ 0,00</span>
+                </div>
+            `;
+
+        const showView = (viewId) => {
+          mainContent.innerHTML = views[viewId] || views["default"];
+          lucide.createIcons();
+
+          if (viewId === "dashboard_projetos") renderProjetosChart();
+          if (viewId === "dashboard_fluxo_caixa") renderFluxoCaixaChart();
+          if (viewId === "projetos_orcamento_detail")
+            setupOrcamentoDetailView();
+          if (viewId === "projetos_projetos") renderJobsList();
+          if (viewId === "cadastro_geral") renderCadastroList();
+          if (viewId === "cadastro_detalhe") setupCadastroDetalheView();
+
+          document
+            .querySelectorAll("#main-nav a, #main-nav button")
+            .forEach((el) => {
+              el.classList.remove("bg-blue-600", "text-white", "shadow-lg");
+              if (el.getAttribute("data-view-target") === viewId) {
+                el.classList.add("bg-blue-600", "text-white", "shadow-lg");
+              }
+            });
+        };
+
+        // --- LÓGICA DA TELA DE DETALHE DO ORÇAMENTO ---
+        const setupOrcamentoDetailView = () => {
+          const tabContainer = document.getElementById("tab-content-container");
+          const tabs = document.querySelectorAll(".tab-btn");
+
+          const showTabContent = (tabId) => {
+            tabContainer.innerHTML = tabContents[tabId];
+            const valoresContainer =
+              document.querySelectorAll("#valores-container");
+            valoresContainer.forEach(
+              (container) => (container.innerHTML = valoresPanelHTML)
+            );
+
+            lucide.createIcons();
+
+            if (tabId === "planilha") {
+              setupPlanilhaCustos();
+            } else {
+              // Se não for a planilha, ainda precisamos garantir que o painel de valores funcione
+              setupValoresPanel();
+            }
+          };
+
+          tabs.forEach((tab) => {
+            tab.addEventListener("click", (e) => {
+              e.preventDefault();
+              tabs.forEach((t) => {
+                t.classList.remove("border-blue-500", "text-blue-600");
+                t.classList.add(
+                  "border-transparent",
+                  "text-gray-500",
+                  "hover:text-gray-700",
+                  "hover:border-gray-300"
+                );
+              });
+              e.currentTarget.classList.add("border-blue-500", "text-blue-600");
+              e.currentTarget.classList.remove(
+                "border-transparent",
+                "text-gray-500",
+                "hover:text-gray-700",
+                "hover:border-gray-300"
+              );
+              showTabContent(e.currentTarget.dataset.tab);
+            });
+          });
+
+          // Dropdown "Geral"
+          const geralMenuBtn = document.getElementById("geral-menu-btn");
+          const geralMenuDropdown = document.getElementById(
+            "geral-menu-dropdown"
+          );
+          geralMenuBtn.addEventListener("click", () => {
+            geralMenuDropdown.classList.toggle("hidden");
+          });
+          // Fecha o dropdown se clicar fora
+          window.addEventListener("click", (e) => {
+            if (
+              !document
+                .getElementById("geral-menu-container")
+                ?.contains(e.target)
+            ) {
+              geralMenuDropdown?.classList.add("hidden");
+            }
+          });
+
+          // Botão Transformar em JOB
+          document
+            .getElementById("transformar-job-btn")
+            .addEventListener("click", () => {
+              const newJobId = `JOB_${String(jobsData.length + 1).padStart(
+                3,
+                "0"
+              )}`;
+              const newJob = {
+                id: newJobId,
+                projeto: "NOVO JOB DO ORÇAMENTO",
+                cliente: "Cliente Exemplo",
+                orcado: parseFloat(
+                  document
+                    .getElementById("total-geral")
+                    ?.textContent.replace("R$", "")
+                    .replace(/\./g, "")
+                    .replace(",", ".") || "0"
+                ),
+                realizado: 0,
+                status: "Em Andamento",
+              };
+              jobsData.push(newJob);
+              showView("projetos_projetos");
+            });
+
+          // Mostra a aba de identificação por padrão
+          showTabContent("identificacao");
+        };
+
+        // --- LÓGICA DA TELA DE CADASTRO DE CLIENTE ---
+        const setupCadastroDetalheView = () => {
+          const tabContainer = document.getElementById("cadastro-tab-content");
+          const tabs = document.querySelectorAll(".cadastro-tab-btn");
+
+          const showCadastroTabContent = (tabId) => {
+            tabContainer.innerHTML = cadastroTabContents[tabId] || "";
+          };
+
+          tabs.forEach((tab) => {
+            tab.addEventListener("click", (e) => {
+              e.preventDefault();
+              tabs.forEach((t) => {
+                t.classList.remove("border-blue-500", "text-blue-600");
+                t.classList.add("border-transparent", "text-gray-500");
+              });
+              e.currentTarget.classList.add("border-blue-500", "text-blue-600");
+              e.currentTarget.classList.remove(
+                "border-transparent",
+                "text-gray-500"
+              );
+              showCadastroTabContent(e.currentTarget.dataset.tab);
+            });
+          });
+
+          // Mostra a primeira aba por padrão
+          showCadastroTabContent("endereco");
+        };
+
+        // --- GERAÇÃO DO MENU ---
+        const generateMenu = () => {
+          mainNav.innerHTML = ""; // Limpa o menu antes de gerar
+          menuItems.forEach((item) => {
+            const menuContainer = document.createElement("div");
+            if (item.sub) {
+              const button = document.createElement("button");
+              button.className =
+                "flex items-center w-full px-4 py-2.5 text-left rounded-md transition-colors duration-200 text-gray-300 hover:bg-gray-700 hover:text-white sidebar-link-container";
+              button.innerHTML = `<i data-lucide="${item.icon}" class="w-5 h-5 mr-3"></i><span class="flex-1 sidebar-text">${item.title}</span><i data-lucide="chevron-down" class="w-4 h-4 submenu-icon"></i>`;
+
+              const subMenu = document.createElement("div");
+              subMenu.className = "mt-1 space-y-1 hidden";
+
+              item.sub.forEach((subItem) => {
+                const link = document.createElement("a");
+                link.href = "#";
+                link.className =
+                  "flex items-center w-full px-4 py-2.5 rounded-md transition-colors duration-200 pl-11 text-gray-300 hover:bg-gray-700 hover:text-white";
+                link.textContent = subItem.title;
+                link.dataset.viewTarget = subItem.id;
+                subMenu.appendChild(link);
+              });
+
+              button.addEventListener("click", () => {
+                if (!sidebar.classList.contains("collapsed")) {
+                  subMenu.classList.toggle("hidden");
+                  const icon = button.querySelector(".submenu-icon");
+                  icon.setAttribute(
+                    "data-lucide",
+                    subMenu.classList.contains("hidden")
+                      ? "chevron-down"
+                      : "chevron-up"
+                  );
+                  lucide.createIcons();
+                }
+              });
+
+              menuContainer.appendChild(button);
+              menuContainer.appendChild(subMenu);
+            } else {
+              const link = document.createElement("a");
+              link.href = "#";
+              link.className =
+                "flex items-center w-full px-4 py-2.5 rounded-md transition-colors duration-200 text-gray-300 hover:bg-gray-700 hover:text-white sidebar-link-container";
+              link.innerHTML = `<i data-lucide="${item.icon}" class="w-5 h-5 mr-3"></i><span class="flex-1 sidebar-text">${item.title}</span>`;
+              link.dataset.viewTarget = item.id;
+              menuContainer.appendChild(link);
+            }
+            mainNav.appendChild(menuContainer);
+          });
+          lucide.createIcons();
+        };
+
+        // --- EVENT LISTENERS GLOBAIS ---
+        document.body.addEventListener("click", (e) => {
+          const targetLink = e.target.closest("[data-view-target]");
+          if (targetLink) {
+            e.preventDefault();
+            const viewId = targetLink.dataset.viewTarget;
+            showView(viewId);
+            if (window.innerWidth < 768) {
+              // md breakpoint
+              sidebar.classList.add("-translate-x-full");
+              sidebarOverlay.classList.add("hidden");
+            }
+          }
+        });
+
+        sidebarOpenBtn.addEventListener("click", () => {
+          sidebar.classList.remove("-translate-x-full");
+          sidebarOverlay.classList.remove("hidden");
+        });
+        sidebarCloseBtn.addEventListener("click", () => {
+          sidebar.classList.add("-translate-x-full");
+          sidebarOverlay.classList.add("hidden");
+        });
+        sidebarOverlay.addEventListener("click", () => {
+          sidebar.classList.add("-translate-x-full");
+          sidebarOverlay.classList.add("hidden");
+        });
+        sidebarToggleBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("collapsed");
+          const icon = sidebarToggleBtn.querySelector("i");
+          icon.setAttribute(
+            "data-lucide",
+            sidebar.classList.contains("collapsed")
+              ? "chevrons-right"
+              : "chevrons-left"
+          );
+          lucide.createIcons();
+        });
+
+        // --- LÓGICA DOS GRÁFICOS ---
+        const renderProjetosChart = () => {
+          const options = {
+            chart: { type: "bar", height: 400, toolbar: { show: false } },
+            series: [
+              {
+                name: "Projetos Ativos",
+                data: [12, 15, 18, 14, 20, 25],
+              },
+              {
+                name: "Projetos Concluídos",
+                data: [20, 25, 22, 30, 28, 35],
+              },
+            ],
+            xaxis: { categories: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"] },
+          };
+          const chartEl = document.querySelector("#chart-projetos");
+          if (chartEl) new ApexCharts(chartEl, options).render();
+        };
+        const renderFluxoCaixaChart = () => {
+          const options = {
+            chart: { type: "bar", height: 350, toolbar: { show: false } },
+            series: [
+              {
+                name: "Entradas",
+                data: [45000, 52000, 61000, 58000],
+              },
+              {
+                name: "Saídas",
+                data: [42000, 55000, 50000, 54000],
+              },
+            ],
+            xaxis: { categories: ["Mar", "Abr", "Mai", "Jun"] },
+            colors: ["#22c55e", "#ef4444"],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: "55%",
+                endingShape: "rounded",
+              },
+            },
+            dataLabels: { enabled: false },
+          };
+          const chartEl = document.querySelector("#chart-fluxo-caixa");
+          if (chartEl) new ApexCharts(chartEl, options).render();
+        };
+
+        const calculateAllTotals = () => {
+          let totalPlanilha = 0;
+          const planilhaContainer =
+            document.getElementById("planilha-container");
+          if (planilhaContainer) {
+            planilhaContainer
+              .querySelectorAll("details")
+              .forEach((detail, index) => {
+                let totalGrupo = 0;
+                const itens = detail.querySelectorAll(".planilha-item");
+                itens.forEach((item) => {
+                  const qtd =
+                    parseFloat(item.querySelector(".item-qtd").value) || 0;
+                  const valor =
+                    parseFloat(item.querySelector(".item-valor").value) || 0;
+                  const dias =
+                    parseFloat(item.querySelector(".item-dias").value) || 1;
+                  const totalItem = qtd * valor * dias;
+                  item.querySelector(".item-total").value =
+                    formatCurrency(totalItem);
+                  totalGrupo += totalItem;
+                });
+                const totalGrupoEl = document.getElementById(
+                  `total-grupo-${index}`
+                );
+                if (totalGrupoEl)
+                  totalGrupoEl.textContent = formatCurrency(totalGrupo);
+                totalPlanilha += totalGrupo;
+              });
+            const totalPlanilhaEl = document.getElementById("total-planilha");
+            if (totalPlanilhaEl)
+              totalPlanilhaEl.textContent = formatCurrency(totalPlanilha);
+          }
+
+          const custoProducao = totalPlanilha || 0;
+          const custoProducaoInput = document.getElementById("custo-producao");
+          if (custoProducaoInput)
+            custoProducaoInput.value = formatCurrency(custoProducao);
+
+          const percImpulsionamento =
+            parseFloat(
+              document.getElementById("perc-impulsionamento")?.value
+            ) || 0;
+          const percComissao =
+            parseFloat(document.getElementById("perc-comissao")?.value) || 0;
+          const percImpostos =
+            parseFloat(document.getElementById("perc-impostos")?.value) || 0;
+
+          const valorImpulsionamento =
+            custoProducao * (percImpulsionamento / 100);
+          const valorComissao = custoProducao * (percComissao / 100);
+
+          const valorImpulsionamentoInput = document.getElementById(
+            "valor-impulsionamento"
+          );
+          if (valorImpulsionamentoInput)
+            valorImpulsionamentoInput.value =
+              formatCurrency(valorImpulsionamento);
+
+          const valorComissaoInput = document.getElementById("valor-comissao");
+          if (valorComissaoInput)
+            valorComissaoInput.value = formatCurrency(valorComissao);
+
+          const subtotal = custoProducao + valorImpulsionamento + valorComissao;
+          const valorImpostos = subtotal * (percImpostos / 100);
+
+          const valorImpostosInput = document.getElementById("valor-impostos");
+          if (valorImpostosInput)
+            valorImpostosInput.value = formatCurrency(valorImpostos);
+
+          const totalGeral = subtotal + valorImpostos;
+          const totalGeralElements = document.querySelectorAll("#total-geral");
+          totalGeralElements.forEach(
+            (el) => (el.textContent = formatCurrency(totalGeral))
+          );
+        };
+
+        const attachInputListeners = (element) => {
+          element.querySelectorAll('input[type="number"]').forEach((input) => {
+            input.addEventListener("input", calculateAllTotals);
+          });
+        };
+
+        const setupValoresPanel = () => {
+          const valoresContainer = document.querySelector(".lg\\:col-span-1");
+          if (valoresContainer) {
+            attachInputListeners(valoresContainer);
+          }
+          calculateAllTotals();
+        };
+
+        const setupPlanilhaCustos = () => {
+          const planilhaContainer =
+            document.getElementById("planilha-container");
+          if (!planilhaContainer) return;
+
+          attachInputListeners(planilhaContainer);
+          setupValoresPanel();
+
+          planilhaContainer
+            .querySelectorAll(".add-item-btn")
+            .forEach((button) => {
+              button.addEventListener("click", (e) => {
+                const groupIndex = e.currentTarget.dataset.groupIndex;
+                const container = document.getElementById(
+                  `itens-grupo-${groupIndex}`
+                );
+                const newItem = document.createElement("div");
+                newItem.className =
+                  "grid grid-cols-12 gap-2 items-center planilha-item";
+                newItem.innerHTML = `
+                            <div class="col-span-12 md:col-span-4"><input type="text" class="w-full p-1 border rounded text-sm" placeholder="Nova Descrição"></div>
+                            <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-qtd" value="1"></div>
+                            <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-valor" value="0"></div>
+                            <div class="col-span-4 md:col-span-1"><input type="number" class="w-full p-1 border rounded text-sm item-dias" value="1"></div>
+                            <div class="col-span-4 md:col-span-1"><input type="text" class="w-full p-1 border rounded text-sm" value="un"></div>
+                            <div class="col-span-4 md:col-span-2"><input type="text" class="w-full p-1 border rounded text-sm bg-gray-100 item-total" readonly></div>
+                            <div class="col-span-4 md:col-span-2"><input type="text" class="w-full p-1 border rounded text-sm"></div>
+                        `;
+                container.appendChild(newItem);
+                attachInputListeners(newItem);
+              });
+            });
+        };
+
+        const renderJobsList = (filter = "") => {
+          const jobsListBody = document.getElementById("jobs-list-body");
+          if (!jobsListBody) return;
+
+          const filteredJobs = jobsData.filter(
+            (job) =>
+              job.projeto.toLowerCase().includes(filter.toLowerCase()) ||
+              job.id.toLowerCase().includes(filter.toLowerCase())
+          );
+
+          jobsListBody.innerHTML = filteredJobs
+            .map(
+              (job) => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-4 px-6 whitespace-nowrap text-sm font-medium text-gray-900">${
+                          job.id
+                        }</td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${
+                          job.projeto
+                        }</td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${
+                          job.cliente
+                        }</td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${formatCurrency(
+                          job.orcado
+                        )}</td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">${formatCurrency(
+                          job.realizado
+                        )}</td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              job.status === "Em Andamento"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-green-100 text-green-800"
+                            }">
+                                ${job.status}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6 whitespace-nowrap text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900" data-view-target="projetos_job_detail">Detalhes</button>
+                        </td>
+                    </tr>
+                `
+            )
+            .join("");
+
+          const searchInput = document.getElementById("job-search-input");
+          if (searchInput && !searchInput.dataset.listenerAttached) {
+            searchInput.addEventListener("input", (e) => {
+              renderJobsList(e.target.value);
+            });
+            searchInput.dataset.listenerAttached = "true";
+          }
+        };
+
+        const renderCadastroList = (
+          filter = { tag: "Todos", text: "", method: "razao" }
+        ) => {
+          const listBody = document.getElementById("cadastro-list-body");
+          if (!listBody) return;
+
+          const filteredData = cadastrosData.filter((c) => {
+            const tagMatch =
+              filter.tag === "Todos" || c.tags.includes(filter.tag);
+            const textMatch =
+              filter.text === "" ||
+              c[filter.method]
+                .toLowerCase()
+                .includes(filter.text.toLowerCase());
+            return tagMatch && textMatch;
+          });
+
+          listBody.innerHTML = filteredData
+            .map(
+              (c) => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-2"><input type="checkbox" /></td>
+                        <td class="p-2"><span class="px-2 py-1 text-xs rounded-full ${
+                          c.situacao === "Ativo"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }">${c.situacao}</span></td>
+                        <td class="p-2 flex space-x-1">${c.tags
+                          .map(
+                            (tag) =>
+                              `<span class="px-2 py-1 text-xs rounded-full ${
+                                tag === "Cliente"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : tag === "Fornecedor"
+                                  ? "bg-orange-100 text-orange-800"
+                                  : tag === "Funcionário"
+                                  ? "bg-purple-100 text-purple-800"
+                                  : "bg-pink-100 text-pink-800"
+                              }">${tag}</span>`
+                          )
+                          .join("")}</td>
+                        <td class="p-2 text-gray-700">${c.cnpj}</td>
+                        <td class="p-2 text-gray-700">${c.razao}</td>
+                        <td class="p-2 text-gray-700">${c.email}</td>
+                        <td class="p-2 text-gray-700"><button class="text-blue-600 hover:text-blue-900" data-view-target="cadastro_detalhe">Editar</button></td>
+                    </tr>
+                `
+            )
+            .join("");
+
+          document.getElementById(
+            "cadastro-count"
+          ).textContent = `${filteredData.length} de ${cadastrosData.length} registros`;
+
+          const filterButtons = document.querySelectorAll(
+            ".cadastro-filter-btn"
+          );
+          filterButtons.forEach((btn) => {
+            btn.classList.remove("text-blue-600", "border-blue-600");
+            btn.classList.add("text-gray-500", "hover:text-gray-700");
+            if (btn.dataset.tag === filter.tag) {
+              btn.classList.add("text-blue-600", "border-blue-600");
+            }
+            if (!btn.dataset.listenerAttached) {
+              btn.addEventListener("click", (e) => {
+                const currentFilter = document.getElementById(
+                  "cadastro-search-input"
+                ).value;
+                const currentMethod = document.getElementById(
+                  "cadastro-search-method"
+                ).value;
+                renderCadastroList({
+                  tag: e.currentTarget.dataset.tag,
+                  text: currentFilter,
+                  method: currentMethod,
+                });
+              });
+              btn.dataset.listenerAttached = "true";
+            }
+          });
+
+          const searchInput = document.getElementById("cadastro-search-input");
+          if (searchInput && !searchInput.dataset.listenerAttached) {
+            searchInput.addEventListener("input", (e) => {
+              const currentTag = document.querySelector(
+                ".cadastro-filter-btn.text-blue-600"
+              ).dataset.tag;
+              const currentMethod = document.getElementById(
+                "cadastro-search-method"
+              ).value;
+              renderCadastroList({
+                tag: currentTag,
+                text: e.target.value,
+                method: currentMethod,
+              });
+            });
+            searchInput.dataset.listenerAttached = "true";
+          }
+          const searchMethod = document.getElementById(
+            "cadastro-search-method"
+          );
+          if (searchMethod && !searchMethod.dataset.listenerAttached) {
+            searchMethod.addEventListener("change", (e) => {
+              const currentTag = document.querySelector(
+                ".cadastro-filter-btn.text-blue-600"
+              ).dataset.tag;
+              const currentFilter = document.getElementById(
+                "cadastro-search-input"
+              ).value;
+              renderCadastroList({
+                tag: currentTag,
+                text: currentFilter,
+                method: e.target.value,
+              });
+            });
+            searchMethod.dataset.listenerAttached = "true";
+          }
+        };
+
+        // --- INICIALIZAÇÃO ---
+        generateMenu();
+        showView("dashboard_projetos");
+      });
+    </script>
+  </body>
+</html>

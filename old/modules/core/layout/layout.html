@@ -1,0 +1,262 @@
+<nav id="sidebar" class="sidebar flex flex-col bg-slate-900 text-white w-64">
+  <div class="flex-1 space-y-2 py-4 px-2 overflow-y-auto">
+    <div class="flex items-center justify-between px-4 mb-4">
+      <span class="font-bold text-2xl menu-text">FlowSuite</span
+      ><button
+        id="toggle-sidebar"
+        class="p-1 rounded-full hover:bg-slate-700 focus:outline-none"
+      >
+        <i data-feather="chevrons-left"></i>
+      </button>
+    </div>
+    <ul class="flex flex-col space-y-1">
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="dashboard"
+          ><div class="flex items-center">
+            <i data-feather="bar-chart-2" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Dashboards</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-dashboard" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="dashboard-financeiro">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Financeiro</a
+            >
+          </li>
+          <li class="submenu-item" data-target="dashboard-projetos">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Projetos</a
+            >
+          </li>
+          <li class="submenu-item" data-target="dashboard-royalties">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Royalties</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="projetos"
+          ><div class="flex items-center">
+            <i data-feather="briefcase" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Projetos</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-projetos" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="orcamento-lista">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Orçamentos</a
+            >
+          </li>
+          <li class="submenu-item" data-target="jobs-lista">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Jobs</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="financeiro"
+          ><div class="flex items-center">
+            <i data-feather="dollar-sign" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Financeiro</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-financeiro" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="contas-pagar">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Contas a Pagar</a
+            >
+          </li>
+          <li class="submenu-item" data-target="contas-receber">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Contas a Receber</a
+            >
+          </li>
+          <li class="submenu-item" data-target="bancos">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Bancos</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="autoral"
+          ><div class="flex items-center">
+            <i data-feather="mic" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Autoral</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-autoral" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="cadastro-artista">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Artista</a
+            >
+          </li>
+          <li class="submenu-item" data-target="cadastro-musica">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Música</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="royalties"
+          ><div class="flex items-center">
+            <i data-feather="trending-up" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Royalties</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-royalties" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="royalties-inventario">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Inventário</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item-group">
+        <a
+          href="#"
+          class="flex items-center justify-between w-full py-2.5 px-4 rounded-lg hover:bg-slate-700"
+          data-menu-toggle="cadastros"
+          ><div class="flex items-center">
+            <i data-feather="users" class="w-5 h-5"></i
+            ><span class="ml-3 menu-text">Cadastros</span>
+          </div>
+          <i
+            data-feather="chevron-down"
+            class="submenu-arrow w-5 h-5 menu-text"
+          ></i
+        ></a>
+        <ul id="submenu-cadastros" class="hidden mt-1 space-y-1">
+          <li class="submenu-item" data-target="cadastro-cliente">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Cliente</a
+            >
+          </li>
+          <li class="submenu-item" data-target="cadastro-fornecedor">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Fornecedor</a
+            >
+          </li>
+          <li class="submenu-item" data-target="cadastro-funcionario">
+            <a
+              href="#"
+              class="flex items-center py-2 pl-12 pr-4 rounded-lg text-sm"
+              >Funcionário</a
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="p-4 border-t border-slate-700 relative">
+    <div id="user-menu-trigger" class="flex items-center cursor-pointer">
+      <img
+        src="https://placehold.co/40x40/E2E8F0/475569?text=U"
+        alt="Avatar do Usuário"
+        class="w-10 h-10 rounded-full"
+      />
+      <div class="ml-3 menu-text">
+        <p class="font-semibold text-sm">Usuário</p>
+        <p class="text-xs text-slate-400">Admin</p>
+      </div>
+    </div>
+    <div
+      id="user-menu"
+      class="hidden absolute bottom-full mb-2 left-0 w-full bg-slate-800 rounded-lg p-2 text-sm"
+    >
+      <a href="#" class="block px-4 py-2 hover:bg-slate-700 rounded-md"
+        >Mudar Senha</a
+      ><a href="#" class="block px-4 py-2 hover:bg-slate-700 rounded-md"
+        >Configurações</a
+      >
+      <hr class="my-1 border-slate-600" />
+      <a
+        href="#"
+        class="flex items-center gap-2 px-4 py-2 text-red-400 hover:bg-slate-700 rounded-md"
+        ><i data-feather="log-out" class="w-4 h-4"></i>Sair</a
+      >
+    </div>
+  </div>
+</nav>
+<main class="flex-1 flex flex-col overflow-y-auto">
+  <header
+    class="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-10"
+  >
+    <h1 id="page-title" class="text-2xl font-bold text-slate-900"></h1>
+    <div class="flex items-center gap-4">
+      <label for="company-switcher" class="text-sm font-medium">Empresa:</label
+      ><select
+        id="company-switcher"
+        class="border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option>Filial Principal</option>
+        <option>Filial Secundária</option>
+      </select>
+    </div>
+  </header>
+  <div id="content-container" class="p-4 md:p-6 lg:p-8 space-y-6"></div>
+</main>

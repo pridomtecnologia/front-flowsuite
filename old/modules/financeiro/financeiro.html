@@ -1,0 +1,65 @@
+<!-- TELA 1: LISTA DE contas -->
+
+<div id="contas-pagar" class="content-wrapper hidden card">
+ 
+
+  <body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden font-inter">
+        <!-- Links de navegação serão inseridos aqui pelo main.js -->
+      </nav>
+    </aside>
+    <!-- Conteúdo Principal -->
+    <div class="flex flex-col flex-1 w-0 overflow-hidden">
+      <main class="relative flex-1 overflow-y-auto focus:outline-none">
+        <button id="open-sidebar-btn" class="m-4 text-gray-500 lg:hidden">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <div class="p-6 mx-auto max-w-7xl" id="page-content">
+          <!-- Conteúdo Financeiro -->
+          <h1 class="text-3xl font-bold text-gray-800">Financeiro</h1>
+          <p class="mt-1 text-gray-600">
+            Controle suas contas a pagar e a receber.
+          </p>
+
+          <div class="mt-6 border-b border-gray-200">
+            <nav class="flex -mb-px space-x-6" aria-label="Tabs">
+              <button
+                id="tab-pagar"
+                class="tab-btn border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+              >
+                Contas a Pagar
+              </button>
+              <button
+                id="tab-receber"
+                class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+              >
+                Contas a Receber
+              </button>
+            </nav>
+          </div>
+
+          <div class="mt-8" id="financeiro-content">
+            <!-- Tabelas serão inseridas aqui pelo financeiro.js -->
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+  <script src="financeiro.js"></script>
+</body>
+</div>
+<div id="contas-receber" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Contas a Receber</h2>
+</div>
+<div id="contabilidade" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Contabilidade</h2>
+</div>
+<div id="bancos" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Bancos</h2>
+</div>
+<div id="relatorios" class="content-wrapper hidden card">
+  <h2 class="text-xl font-bold">Relatórios</h2>
+</div>

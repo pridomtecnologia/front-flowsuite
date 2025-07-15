@@ -1,0 +1,49 @@
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc;
+}
+.sidebar {
+  transition: width 0.3s ease;
+}
+.sidebar .menu-text,
+.sidebar .submenu-arrow {
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.sidebar.collapsed .menu-text,
+.sidebar.collapsed .submenu-arrow {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+}
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+}
+.tab-button.active {
+  border-bottom-color: #3b82f6;
+  color: #3b82f6;
+  font-weight: 600;
+}
+.submenu-item.active > a {
+  background-color: #475569;
+  color: white;
+  font-weight: 500;
+}
+.menu-item-group.active > a {
+  background-color: #1e293b;
+}
+.submenu-arrow {
+  transition: transform 0.3s ease;
+}
+.submenu-arrow.rotate-180 {
+  transform: rotate(180deg);
+}
+.planilha-tab.active {
+  border-bottom-color: #3b82f6;
+  color: #3b82f6;
+}
+.item-row.hidden {
+  display: none;
+}
